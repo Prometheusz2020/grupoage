@@ -7,7 +7,13 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
-app.use('/api', routes); // Mount routes under /api so Netlify redirects work nicely
+
+// Mount similar paths to handle different execution contexts (Netlify Rewrite vs Raw)
+const router = express.Router();
+router.use('/', routes); // Routes already have their specific paths
+
+app.use('/api', routes);
+app.use('/.netlify/functions/api', routes); // Fallback for raw function path
 
 // Health Check
 app.get('/api/health', (req, res) => {
