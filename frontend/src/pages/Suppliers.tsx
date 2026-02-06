@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Layout } from '../components/Layout';
 import { api } from '../services/api';
-import { Plus, Search, Truck, Package, Power } from 'lucide-react';
+import { Plus, Truck, Package, Power } from 'lucide-react';
 import { CreateSupplierModal } from '../components/CreateSupplierModal';
 
 interface Supplier {

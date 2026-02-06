@@ -1,5 +1,5 @@
-import { useState, useEffect, FormEvent } from 'react';
-import { X, User as UserIcon, Phone, FileText, Building } from 'lucide-react';
+import { useState, useEffect, type FormEvent } from 'react';
+import { X, User as UserIcon, Phone, Building } from 'lucide-react';
 import { api } from '../services/api';
 
 interface CreateSupplierModalProps {

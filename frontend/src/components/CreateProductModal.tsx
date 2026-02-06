@@ -1,4 +1,4 @@
-import { useState, FormEvent, useEffect } from 'react';
+import { useState, type FormEvent, useEffect } from 'react';
 import { X, Package, DollarSign, Box, Truck } from 'lucide-react';
 import { api } from '../services/api';
 

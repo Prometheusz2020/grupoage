@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Layout } from '../components/Layout';
 import { api } from '../services/api';
-import { Search, Plus, Package, ArrowLeft, Filter } from 'lucide-react';
+import { Search, Plus, Package, Filter } from 'lucide-react';
 import { CreateProductModal } from '../components/CreateProductModal';
 
 interface Supplier {
