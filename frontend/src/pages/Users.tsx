@@ -28,8 +28,10 @@ export function Users() {
         try {
             const response = await api.get('/users');
             setUsers(response.data);
-        } catch (error) {
+        } catch (error: any) {
             console.error("Failed to load users", error);
+            const errorMessage = error.response?.data?.details || error.response?.data?.error || error.message;
+            alert(`Erro ao carregar usuários: ${errorMessage}`);
         } finally {
             setLoading(false);
         }
