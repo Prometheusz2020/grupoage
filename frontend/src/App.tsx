@@ -45,6 +45,8 @@ function Dashboard() {
 
 import { Suppliers } from './pages/Suppliers';
 import { Products } from './pages/Products';
+import { Users } from './pages/Users';
+import { Stores } from './pages/Stores';
 
 function App() {
   return (
@@ -71,7 +73,17 @@ function App() {
           } />
 
           {/* Add placeholder routes for now */}
-          <Route path="/stores" element={<PrivateRoute><Layout><h1>Lojas</h1></Layout></PrivateRoute>} />
+          <Route path="/stores" element={
+            <PrivateRoute>
+              <Stores />
+            </PrivateRoute>
+          } />
+
+          <Route path="/users" element={
+            <PrivateRoute>
+              <Users />
+            </PrivateRoute>
+          } />
         </Routes>
       </AuthProvider>
     </BrowserRouter>
