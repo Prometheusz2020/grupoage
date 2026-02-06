@@ -1,0 +1,105 @@
+// schema.prisma
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  name      String
+  password  String   // Hash
+  role      String   @default("USER") // ADMIN, USER
+
+  // A user can own multiple stores
+  stores    Store[]
+
+  // A user can be responsible for multiple suppliers (manager role)
+  managedSuppliers Supplier[]
+}
+
+model Store {
+  id        Int    @id @default(autoincrement())
+  name      String
+  ownerId   Int
+  owner     User   @relation(fields: [ownerId], references: [id])
+  
+  orders    OrderItem[]
+}
+
+model Supplier {
+  id              Int     @id @default(autoincrement())
+  tradeName       String  // Nome Fantasia
+  corporateName   String? // Razão Social
+  cnpj            String  @unique
+  email           String?
+  
+  phone1          String?
+  phone2          String?
+
+  address         String? // Endereço completo
+  
+  contactName1    String? // Contato principal
+  contactName2    String? // Contato secundário
+  
+  notes           String? // Observações (Obs)
+
+  isActive        Boolean @default(true)
+  
+  managerId       Int     // O responsável por negociar (Lojista)
+  manager         User    @relation(fields: [managerId], references: [id])
+
+  products        Product[]
+  purchaseCycles  PurchaseCycle[]
+}
+
+model Product {
+  id          Int      @id @default(autoincrement())
+  name        String
+  
+  costPrice   Decimal  @db.Decimal(10, 2) // Preço de Custo (Unitário)
+  salePrice   Decimal  @db.Decimal(10, 2) // Preço de Venda
+  
+  itemsPerBox Int      @default(1)        // Qtde por caixa
+  boxPrice    Decimal  @db.Decimal(10, 2) // Preço da caixa fechada
+  
+  stock       Int      @default(0) // For future use
+  active      Boolean  @default(true)
+  
+  supplierId  Int
+  supplier    Supplier @relation(fields: [supplierId], references: [id])
+  
+  orderItems  OrderItem[]
+}
+
+model PurchaseCycle {
+  id          Int       @id @default(autoincrement())
+  supplierId  Int
+  supplier    Supplier  @relation(fields: [supplierId], references: [id])
+  
+  startDate   DateTime  @default(now())
+  endDate     DateTime? // When it was closed
+  status      String    @default("OPEN") // OPEN, CLOSED, CANCELLED
+  
+  items       OrderItem[]
+}
+
+model OrderItem {
+  id              Int           @id @default(autoincrement())
+  purchaseCycleId Int
+  purchaseCycle   PurchaseCycle @relation(fields: [purchaseCycleId], references: [id])
+  
+  storeId         Int
+  store           Store         @relation(fields: [storeId], references: [id])
+  
+  productId       Int
+  product         Product       @relation(fields: [productId], references: [id])
+  
+  quantity        Int
+  unitPrice       Decimal       @db.Decimal(10, 2) // Snapshot of price at time of order
+}
